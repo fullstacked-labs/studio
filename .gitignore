@@ -2,3 +2,4 @@ node_modules/
 out/
 .env
 fixtures/*/app/node_modules/
+captures/audio/
