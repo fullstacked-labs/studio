@@ -13,8 +13,9 @@ around them (window chrome, a phone body, an editor pane) is drawn here.
 src/lib/                 shared pieces: Terminal (ANSI replay), Editor, Phone, fonts
 src/projects/<product>/  compositions for one product
 captures/<product>/      real screenshots, recorded output, meta.json (served as static files)
+captures/sfx/            synthesized sound effects (scripts/sfx.mjs)
 fixtures/<product>/      apps and scripts that produce the captures
-exports/<product>/       finished renders: mp4, animated WebP, poster
+exports/<product>/       finished renders: mp4, animated AVIF, poster
 ```
 
 ## Commands
@@ -23,13 +24,14 @@ exports/<product>/       finished renders: mp4, animated WebP, poster
 npm install
 npm run dev                                         # Remotion Studio preview
 node fixtures/devhop/capture.mjs                    # re-capture devhop (needs network)
+npm run qa -- DevhopDemo                            # contact sheet, a still every half second
 ```
 
-Rendering and the WebP encode are per product; devhop's are in
+Rendering and the AVIF encode are per product; devhop's are in
 `fixtures/devhop/README.md`. Finished files are committed under `exports/<product>/`.
 
 ## License
 
-Code here is MIT. Remotion has its own
+Code here is MIT; `src/lib/motion.tsx` adapts Apache-2.0 code, see `NOTICE`. Remotion has its own
 [license](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md): free for
 individuals and companies of up to three people, a company license above that.

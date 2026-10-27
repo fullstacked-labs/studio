@@ -1,0 +1,7 @@
+studio
+Copyright (c) 2026 Noor Latif
+
+src/lib/motion.tsx adapts code from video-shotcraft
+(https://github.com/Vincentwei1021/video-shotcraft), Copyright Wei Yihao,
+licensed under the Apache License, Version 2.0:
+https://www.apache.org/licenses/LICENSE-2.0
