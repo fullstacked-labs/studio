@@ -1,0 +1,19 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Voice note</title>
+<style>body{font:17px -apple-system,system-ui,sans-serif;margin:0;padding:32px 20px;background:#fafafa;color:#111}
+h1{font-size:28px;margin:0 0 24px}button{font:inherit;font-weight:600;width:100%;padding:18px;border:0;border-radius:14px;background:#111;color:#fff}
+pre{white-space:pre-wrap;font:14px ui-monospace,monospace;background:#fff;border:1px solid #ddd;border-radius:10px;padding:14px;margin-top:20px}</style>
+<h1>🎙 Voice note</h1>
+<button id="b">Hold to record</button>
+<pre id="o"></pre>
+<script>
+const o=document.getElementById('o');
+const log=s=>o.textContent+=s+'\n';
+log('origin: '+location.origin);
+log('isSecureContext: '+window.isSecureContext);
+log('navigator.mediaDevices: '+navigator.mediaDevices);
+document.getElementById('b').onclick=async()=>{
+  try{const s=await navigator.mediaDevices.getUserMedia({audio:true});log('✓ mic on: '+s.getAudioTracks()[0].label)}
+  catch(e){log(e.name+': '+e.message)}
+};
+</script>

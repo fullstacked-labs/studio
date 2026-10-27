@@ -30,6 +30,23 @@ function Hero() {
   );
 }
 
+// The film's mic story: over plain http on a phone navigator.mediaDevices is
+// undefined, so the call throws; over devhop's HTTPS the browser asks for the mic.
+// Each tap adds a line, so repeated taps stack the same error.
+async function recordVoiceNote() {
+  const line = document.createElement('p');
+  line.style.cssText = 'margin: 8px 0 0; font: 13px ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere';
+  try {
+    await navigator.mediaDevices.getUserMedia({ audio: true });
+    line.textContent = '● Recording';
+    line.style.color = '#16a34a';
+  } catch (e) {
+    line.textContent = `${e.name}: ${e.message}`;
+    line.style.color = '#dc2626';
+  }
+  document.getElementById('voice-log').append(line);
+}
+
 export default function App() {
   const t = theme;
   return (
@@ -38,6 +55,10 @@ export default function App() {
       <div style={{ padding: '22px 20px 28px' }}>
         <p style={{ margin: 0, color: t.accent, fontWeight: 700, fontSize: 14, letterSpacing: 0.6 }}>{t.label}</p>
         <h1 style={{ margin: '6px 0 18px', fontSize: 34, lineHeight: 1.1 }}>{t.title}</h1>
+        <button onClick={recordVoiceNote} style={{ width: '100%', padding: '14px 0', border: `2px solid ${t.accent}`, borderRadius: 14, background: 'transparent', color: t.accent, fontSize: 17, fontWeight: 700 }}>
+          🎙 Voice note
+        </button>
+        <div id="voice-log" style={{ marginBottom: 18 }} />
         {trails.map((trail) => (
           <section key={trail.name} style={{ background: t.card, borderRadius: 16, padding: '15px 18px', marginBottom: 10, boxShadow: '0 1px 3px rgba(0,0,0,.12)' }}>
             <h2 style={{ margin: 0, fontSize: 18 }}>{trail.name}</h2>

@@ -118,6 +118,27 @@ const blockedReady = async (page) =>
 const appReady = (page) =>
   page.getByText('Pick a trail').waitFor({ state: 'visible', timeout: 15000 }).then(() => true, () => false);
 
+// Vite's own startup banner, as `npm run dev` prints it: default host, so it
+// says localhost and tells you the network is not exposed.
+async function captureViteBanner(port) {
+  const child = spawn('script', ['-q', '-e', '-c', `stty cols 80 rows 20; ${join(appDir, 'node_modules/.bin/vite')} --port ${port} --strictPort`, '/dev/null'], {
+    cwd: appDir,
+    env: { ...process.env, TERM: 'xterm-256color', SHELL: '/bin/sh', COLUMNS: '80', LINES: '20' },
+    stdio: ['pipe', 'pipe', 'pipe'],
+  });
+  const chunks = [];
+  child.stdout.on('data', (d) => chunks.push(d));
+  const exited = exitOf(child);
+  const text = () => stripAnsi(Buffer.concat(chunks).toString('utf8'));
+  await pollUntil(async () => /Network:[^\n]*\n/.test(text()), 30000, 'vite banner');
+  await sleep(500);
+  const bytes = Buffer.concat(chunks);
+  for (const pid of pgrepPids(`node_modules/.bin/vite --port ${port} --strictPort$`)) process.kill(pid, 'SIGTERM');
+  await Promise.race([exited, sleep(5000)]);
+  if (child.exitCode === null) child.kill('SIGTERM');
+  return bytes;
+}
+
 // devhop runs under script(1) so it sees a real TTY and prints its colored
 // dashboard. The stty call sets the pty size; COLUMNS/LINES alone do not.
 function startDevhop(port) {
@@ -190,6 +211,8 @@ async function main() {
   let vitePort;
   try {
     vitePort = demoPort;
+    writeFileSync(out('vite.ansi'), await captureViteBanner(vitePort));
+    log('vite banner captured');
     log(`starting vite on port ${vitePort}`);
     vite = await startVite(vitePort);
     log('vite answering');
@@ -213,6 +236,12 @@ async function main() {
     const blockedPage = await blockedContext.newPage();
     await retryLoad(blockedPage, cf.url, blockedReady, 'blocked');
     meta.blockedText = await blockedPage.evaluate(() => document.body.innerText);
+    // The edit Vite's message asks for, applied to the real config file's text.
+    const blockedHost = /\("?([a-z0-9.-]+\.trycloudflare\.com)"?\)/.exec(meta.blockedText)?.[1];
+    const config = readFileSync(join(appDir, 'vite.config.js'), 'utf8');
+    meta.configBefore = config;
+    meta.configAfter = config.replace('{ plugins: [react()] }', `{\n  plugins: [react()],\n  server: { allowedHosts: ['${blockedHost}'] },\n}`);
+    if (meta.configAfter === config) throw new Error('vite.config.js no longer has the expected defineConfig call');
     await blockedPage.screenshot({ path: out('blocked.png') });
     await blockedContext.close();
     cf.child.kill();
@@ -254,6 +283,8 @@ async function main() {
     await page.screenshot({ path: out('edited.png') });
     log(`night theme after ${meta.hmrMs} ms; hotUpdate=${meta.hotUpdate}`);
 
+    // The agent skill devhop ships, shown as-is in the long cut's last chapter.
+    writeFileSync(out('SKILL.md'), readFileSync(join(devhopDir, 'skills/devhop/SKILL.md')));
     writeFileSync(out('meta.json'), JSON.stringify(meta, null, 2) + '\n');
     log('meta.json written');
   } finally {
