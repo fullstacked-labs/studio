@@ -1,0 +1,10 @@
+{
+  "capturedAt": "2026-10-27T02:44:28.034Z",
+  "viteVersion": "8.3.5",
+  "devhopVersion": "0.2.0",
+  "port": 5173,
+  "blockedText": "Blocked request. This host (\"middle-eva-quickly-attending.trycloudflare.com\") is not allowed.\nTo allow this host, add \"middle-eva-quickly-attending.trycloudflare.com\" to `server.allowedHosts` in vite.config.js.",
+  "devhopUrl": "https://household-antibody-opinion-theories.trycloudflare.com",
+  "hmrMs": 225,
+  "hotUpdate": true
+}

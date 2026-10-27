@@ -1,0 +1,38 @@
+
+[36m●[39m Initializing [1mdevhop[22m for port [1m5173[22m...
+[2m  Local masquerade proxy ready on port 37761[22m
+[36m●[39m Connecting secure tunnel to Cloudflare Edge...
+[2m  Waiting for Cloudflare edge...[22m
+[1;1H[0J
+[1m[46m[30m 🦘 DEVHOP [39m[49m[22m
+
+  [1mTarget:[22m       [32mhttp://127.0.0.1:5173[39m
+  [1mMobile URL:[22m   [1m[4m[36mhttps://household-antibody-opinion-theories.trycloudflare.com[39m[24m[22m
+  [33m⚠ Public link — anyone with it can open your dev server. Ctrl+C when done.[39m
+
+  [32m✔[39m Connected to Cloudflare Edge [ARN]
+
+[2m  Scan with your iPhone or Android camera:[22m
+
+  [40m[37m▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[39m[49m
+  [40m[37m█ ▄▄▄▄▄ █▀█ █▄ ▀▀  ▄▄▀█▀▄██ ▄▄▄▄▄ █[39m[49m
+  [40m[37m█ █   █ █▀▀▀█ ▀ ▀█▀▄▄▀▄ ▀▀█ █   █ █[39m[49m
+  [40m[37m█ █▄▄▄█ █▀ █▀▀▄▀▀▄██▄  ▄▄▄█ █▄▄▄█ █[39m[49m
+  [40m[37m█▄▄▄▄▄▄▄█▄▀ ▀▄█ █ █ █ ▀▄█ █▄▄▄▄▄▄▄█[39m[49m
+  [40m[37m█▄ ▄▄▄█▄▄▄▄▀▄▀▀███▄█▀▀█▄ █▄▀▄█▄▀ ▀█[39m[49m
+  [40m[37m█▄▄▀▀▄▀▄▄▀█▄█▀ ▄  ▄ █▄ ▀█▄▄▄█ ▄▀▄██[39m[49m
+  [40m[37m█ ▀█▀ █▄ ▀ ▄█▄█▄▄▀ █ ▀█▄▀▄▄▀▄▄▄█▀▀█[39m[49m
+  [40m[37m█▀▄█  ▄▄█▄█▄ ▄█▀▄██▄▀█▀▄▀█▄█ ▀█▀▄██[39m[49m
+  [40m[37m█▄█▀ ██▄▄▄█▀▄▀▀▀▄ ▄▀▀ █▄ ▄█▀▄▄▀█ ▀█[39m[49m
+  [40m[37m█▀█▀▄▄▄▄ ▀▀▀█▀ ▄ ▄▄▄▀  ▀▀  ▄██▄▀▄██[39m[49m
+  [40m[37m█▀▄▀█ █▄ ██▀█▄█▄▄▀ ▀ ▀█▄▀▄▄▀▄▄▀█ ▀█[39m[49m
+  [40m[37m█ █▀  ▄▄ █ ▀ ▄█▀ ▀█▀█ ▀ █▀▀█▀▄ ▀▄██[39m[49m
+  [40m[37m█▄███▄█▄▄ ██▄▀▀▀█▀ ▀▀▀█▄▄ ▄▄▄ ███ █[39m[49m
+  [40m[37m█ ▄▄▄▄▄ █▄▀▀█▀ ▄▄▀▄███▀▄  █▄█ ▀  ██[39m[49m
+  [40m[37m█ █   █ █ ▀██▄█▄▄▀▄█ ▀███  ▄▄ ▀█  █[39m[49m
+  [40m[37m█ █▄▄▄█ █ ▀▄ ▄█▀ ▀███▀   ▄▀ ██ ▀███[39m[49m
+  [40m[37m█▄▄▄▄▄▄▄█▄▄█▄███▄█▄██▄█▄▄▄█▄██▄█▄██[39m[49m
+  [40m[37m[39m[49m
+
+[2m  Press [22m[1mCtrl+C[22m[2m to stop the tunnel and disconnect.[22m
+
