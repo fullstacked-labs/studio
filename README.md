@@ -32,6 +32,6 @@ Rendering and the AVIF encode are per product; devhop's are in
 
 ## License
 
-Code here is MIT; `src/lib/motion.tsx` adapts Apache-2.0 code, see `NOTICE`. Remotion has its own
-[license](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md): free for
-individuals and companies of up to three people, a company license above that.
+Apache-2.0, see `LICENSE`. Parts are copied from video-shotcraft (also Apache-2.0); `NOTICE` lists
+them. Remotion has its own [license](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md):
+free for individuals and companies of up to three people, a company license above that.
