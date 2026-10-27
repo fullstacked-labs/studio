@@ -1,0 +1,26 @@
+export const themes = {
+  day: {
+    bg: '#eef4fb',
+    card: '#ffffff',
+    ink: '#0f172a',
+    muted: '#64748b',
+    accent: '#2563eb',
+    sky: ['#7cc4ff', '#dff1ff'],
+    hills: ['#5fae7c', '#3f8f60'],
+    orb: '#ffcf3d',
+    label: 'SATURDAY · 21°',
+    title: 'Pick a trail',
+  },
+  night: {
+    bg: '#0b1024',
+    card: '#151c3a',
+    ink: '#f1f4ff',
+    muted: '#9aa6d1',
+    accent: '#ffb547',
+    sky: ['#1a1f4d', '#4b2d73'],
+    hills: ['#24305e', '#18214a'],
+    orb: '#f4f1d9',
+    label: 'TONIGHT · 9°',
+    title: 'Night hikes',
+  },
+};

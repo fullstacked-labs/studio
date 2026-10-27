@@ -22,9 +22,9 @@ const chromePath = process.env.CHROME ?? '/usr/bin/chromium';
 // Vite's default port, so the typed commands in the demo look like a normal session.
 const demoPort = Number(process.env.PORT ?? 5173);
 const iphoneUa = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1';
-const blue = '#2563eb';
-const orange = '#f97316';
-const orangeRgb = 'rgb(249, 115, 22)';
+const dayLine = 'const theme = themes.day;';
+const nightLine = 'const theme = themes.night;';
+const nightBg = 'rgb(11, 16, 36)';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const log = (...args) => console.log(new Date().toISOString().slice(11, 19), ...args);
@@ -206,23 +206,15 @@ async function main() {
     // 1. Blocked host: raw tunnel to Vite, no devhop.
     cf = await startQuickTunnel(vitePort);
     log(`raw tunnel: ${cf.url}`);
-    const blockedPage = await context.newPage();
+    // Vite's block page is plain text with no viewport tag, so mobile emulation
+    // lays it out 980px wide and shrinks it to unreadable. Without isMobile the
+    // same response wraps at phone width. 4x so the hook shot can zoom into it.
+    const blockedContext = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 4, userAgent: iphoneUa });
+    const blockedPage = await blockedContext.newPage();
     await retryLoad(blockedPage, cf.url, blockedReady, 'blocked');
     meta.blockedText = await blockedPage.evaluate(() => document.body.innerText);
     await blockedPage.screenshot({ path: out('blocked.png') });
-    // Vite's block page is plain text with no viewport tag, so a phone shows it
-    // zoomed out to unreadable. The same response in a narrow desktop window feeds the loupe.
-    const textContext = await browser.newContext({ viewport: { width: 440, height: 400 }, deviceScaleFactor: 3 });
-    const textPage = await textContext.newPage();
-    await retryLoad(textPage, cf.url, blockedReady, 'blocked text');
-    const box = await textPage.evaluate(() => {
-      const r = document.createRange();
-      r.selectNodeContents(document.body);
-      const b = r.getBoundingClientRect();
-      return { x: 0, y: 0, width: Math.ceil(b.right + 8), height: Math.ceil(b.bottom + 8) };
-    });
-    await textPage.screenshot({ path: out('blocked-text.png'), clip: box });
-    await textContext.close();
+    await blockedContext.close();
     cf.child.kill();
     await cf.exited;
     log('raw tunnel stopped');
@@ -246,21 +238,21 @@ async function main() {
       window.__noReload = 1;
     });
     const source = original.toString('utf8');
-    if (source.split(blue).length !== 2) throw new Error(`expected exactly one ${blue} in App.jsx`);
+    if (source.split(dayLine).length !== 2) throw new Error(`expected exactly one "${dayLine}" in App.jsx`);
     const t0 = Date.now();
-    writeFileSync(appFile, source.replace(blue, orange));
+    writeFileSync(appFile, source.replace(dayLine, nightLine));
     await page.waitForFunction(
       (rgb) => {
-        const b = [...document.querySelectorAll('button')].find((el) => el.textContent.trim() === 'Start route');
-        return !!b && getComputedStyle(b).backgroundColor === rgb;
+        const main = document.querySelector('main');
+        return !!main && getComputedStyle(main).backgroundColor === rgb;
       },
-      orangeRgb,
+      nightBg,
       { timeout: 30000, polling: 50 },
     );
     meta.hmrMs = Date.now() - t0;
     meta.hotUpdate = (await page.evaluate(() => window.__noReload)) === 1;
     await page.screenshot({ path: out('edited.png') });
-    log(`orange button after ${meta.hmrMs} ms; hotUpdate=${meta.hotUpdate}`);
+    log(`night theme after ${meta.hmrMs} ms; hotUpdate=${meta.hotUpdate}`);
 
     writeFileSync(out('meta.json'), JSON.stringify(meta, null, 2) + '\n');
     log('meta.json written');

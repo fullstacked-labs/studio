@@ -1,15 +1,14 @@
 # devhop captures
 
-`app/` is a small Vite + React page. `capture.mjs` puts it through two real tunnels
+`app/` is a small Vite + React page with a day and a night theme. `capture.mjs` puts it through two real tunnels
 and records what a phone sees:
 
 | File | What it is |
 | --- | --- |
-| `blocked.png` | the app through a plain `cloudflared` quick tunnel: Vite's block page, iPhone-sized |
-| `blocked-text.png` | the same response in a narrow desktop window, for the magnified loupe |
+| `blocked.png` | the app through a plain `cloudflared` quick tunnel: Vite's block page at phone width, 4x |
 | `terminal.ansi` | `devhop <port>` run under a pseudo-TTY, colors and QR code included |
 | `loaded.png` | the app through devhop's tunnel |
-| `edited.png` | the same page after `App.jsx` changes its accent color, with no reload |
+| `edited.png` | the same page after `App.jsx` switches `themes.day` to `themes.night`, with no reload |
 | `meta.json` | port, URLs, versions, and the measured hot-update latency (`hmrMs`) |
 
 ```bash
@@ -25,10 +24,16 @@ hostnames in the captures stop resolving once the run ends.
 ## Render
 
 ```bash
-npx remotion render src/index.ts DevhopDemo exports/devhop/demo.mp4 --crf=12
-npx remotion still src/index.ts DevhopDemo exports/devhop/poster.png --frame=440
-ffmpeg -i exports/devhop/demo.mp4 -vf "fps=20,scale=1280:-1:flags=lanczos" \
-  -c:v libwebp_anim -q:v 70 -compression_level 6 -loop 0 exports/devhop/demo.webp
+node scripts/sfx.mjs                                   # synthesized sound effects
+npx remotion render src/index.ts DevhopDemo exports/devhop/demo.mp4 --crf=16
+npx remotion still src/index.ts DevhopDemo exports/devhop/poster.png --frame=900
+# README animation: AV1 in AVIF, encoded from PNG frames (never from the h264 MP4).
+npx remotion render src/index.ts DevhopDemo out/frames --sequence --image-format=png --scale=0.6667
+ffmpeg -framerate 60 -i out/frames/element-%03d.png \
+  -c:v libaom-av1 -crf 26 -cpu-used 6 -row-mt 1 -pix_fmt yuv444p exports/devhop/demo.avif
 ```
 
-`demo.webp` is what devhop's README embeds as `docs/demo.webp`.
+devhop's README embeds `demo.avif` and `poster.png` as `docs/demo.avif` and
+`docs/demo-poster.png`. Animated WebP was tried and dropped: with a camera that never
+stops, libwebp's animation encoder either leaves stale 8×8 blocks on dark gradients or
+grows past 20 MB.
